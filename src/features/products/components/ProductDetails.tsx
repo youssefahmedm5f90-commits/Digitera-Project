@@ -1,20 +1,61 @@
 import type { Product } from "@/features/products/types/product.types";
-import { formatPrice } from "@/features/products/utils/product.utils";
 
 type ProductDetailsProps = {
   product: Product;
 };
 
-/** US-04: product information. */
+/** US-04: product information header (spec-header). */
 export function ProductDetails({ product }: ProductDetailsProps) {
+  const scentFamilyLabel = product.scentFamily
+    ? `Scent Family: ${product.scentFamily.charAt(0).toUpperCase() + product.scentFamily.slice(1)}`
+    : null;
+
+  const occasionLabel = product.occasion
+    ? `Occasion: ${product.occasion
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ")}`
+    : null;
+
   return (
-    <div>
-      <p className="text-sm uppercase tracking-wide text-zinc-500">
-        {product.category}
-      </p>
-      <h1 className="mt-1 text-3xl font-semibold">{product.name}</h1>
-      <p className="mt-2 text-xl">{formatPrice(product.price)}</p>
-      <p className="mt-4 text-zinc-700">{product.description}</p>
+    <div className="flex flex-col gap-3">
+      {/* Tags row */}
+      {(scentFamilyLabel || occasionLabel) && (
+        <div className="flex flex-wrap gap-2">
+          {scentFamilyLabel && (
+            <span className="rounded-full bg-[#f2ede5] px-[10px] py-1 text-[11px] font-semibold uppercase tracking-wide text-[#1a1a1a]">
+              {scentFamilyLabel}
+            </span>
+          )}
+          {occasionLabel && (
+            <span className="rounded-full bg-[#f2ede5] px-[10px] py-1 text-[11px] font-semibold uppercase tracking-wide text-[#1a1a1a]">
+              {occasionLabel}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Product name */}
+      <h1 className="font-[family-name:var(--font-instrument-serif)] text-[40px] leading-tight text-[#1a1a1a] sm:text-[48px]">
+        {product.name}
+      </h1>
+
+      {/* Price + availability */}
+      <div className="flex flex-wrap items-center gap-4">
+        <p className="text-2xl font-semibold text-[#1a1a1a]">
+          ${product.price}
+        </p>
+        <div className="flex items-center gap-2">
+          <span
+            className="h-2 w-2 rounded-full bg-[#10b981]"
+            aria-hidden="true"
+          />
+          <span className="text-[13px] font-semibold text-[#10b981]">
+            Available in Atelier
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
+
