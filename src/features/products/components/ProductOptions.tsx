@@ -20,10 +20,10 @@ function SizeSelector({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      <span className="text-[12px] font-bold uppercase tracking-wider text-[#1a1a1a]">
-        {option.name}
+      <span className="text-[11px] font-bold uppercase tracking-wider text-[#1a1a1a]">
+        Select Volume
       </span>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex gap-3">
         {option.values.map((value) => {
           const price = option.prices?.[value];
           const isActive = selected === value;
@@ -32,13 +32,13 @@ function SizeSelector({
               key={value}
               type="button"
               onClick={() => onChange(value)}
-              className={`flex min-w-[100px] flex-col items-start gap-0.5 rounded-[4px] border px-3 py-3 transition-colors sm:min-w-[110px] ${
+              className={`flex h-[62px] flex-1 flex-col items-center justify-center gap-0.5 rounded-[4px] px-3 py-2 transition-colors ${
                 isActive
-                  ? "border-[#1a1a1a] bg-white"
-                  : "border-[#ebe6de] bg-transparent hover:border-[#c5a880]"
+                  ? "border-2 border-[#1a1a1a] bg-white"
+                  : "border border-[#ebe6de] bg-transparent hover:border-[#c5a880]"
               }`}
             >
-              <span className="text-[14px] font-medium text-[#1a1a1a]">
+              <span className="text-[14px] font-bold text-[#1a1a1a]">
                 {value}
               </span>
               {price !== undefined && (
@@ -56,7 +56,6 @@ function SizeSelector({
 
 /** Renders the gift-wrapping option as a highlighted card with a toggle. */
 function GiftWrappingOption({
-  option,
   selected,
   onChange,
 }: {
@@ -71,7 +70,7 @@ function GiftWrappingOption({
   }
 
   return (
-    <div className="flex items-start justify-between gap-4 rounded-[4px] bg-[#f4f0eb] px-5 py-5">
+    <div className="flex items-center justify-between gap-4 rounded-[6px] bg-[#f4f0eb] p-5">
       <div className="flex flex-col gap-1">
         <p className="text-[13px] font-semibold text-[#1a1a1a]">
           Complimentary Signature Gift Wrapping
@@ -86,8 +85,8 @@ function GiftWrappingOption({
         role="switch"
         aria-checked={isEnabled}
         onClick={handleToggle}
-        className={`relative mt-0.5 h-6 w-11 flex-shrink-0 rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1a1a1a] ${
-          isEnabled ? "bg-[#1a1a1a]" : "bg-[#d4cfc9]"
+        className={`relative h-6 w-11 shrink-0 rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1a1a1a] ${
+          isEnabled ? "bg-[#c5a880]" : "bg-[#d4cfc9]"
         }`}
       >
         <span

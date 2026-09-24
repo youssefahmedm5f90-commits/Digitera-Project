@@ -13,15 +13,25 @@ export function ProductDetailsWithCart({
   return (
     <ProductDetailsPage
       productId={productId}
-      actions={({ product, selectedOptions }) => (
+      actions={({
+        product,
+        selectedOptions,
+        currentPrice,
+        quantity,
+        onQuantityChange,
+      }) => (
         <AddToCartButton
           productId={product.id}
           name={product.name}
-          price={product.price}
+          price={currentPrice}
           image={product.images[0]}
           selectedOptions={selectedOptions}
+          quantity={quantity}
+          onQuantityChange={onQuantityChange}
+          showQuantitySelector
         />
       )}
     />
   );
 }
+

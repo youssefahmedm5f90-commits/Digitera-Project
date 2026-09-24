@@ -21,17 +21,18 @@ export const useCartStore = create<CartStore>((set) => ({
     set((state) => {
       const id = getCartLineId(input.productId, input.selectedOptions);
       const existing = state.lines.find((line) => line.id === id);
+      const qtyToAdd = input.quantity ?? 1;
 
       if (existing) {
         return {
           lines: state.lines.map((line) =>
-            line.id === id ? { ...line, quantity: line.quantity + 1 } : line,
+            line.id === id ? { ...line, quantity: line.quantity + qtyToAdd } : line,
           ),
         };
       }
 
       return {
-        lines: [...state.lines, { ...input, id, quantity: 1 }],
+        lines: [...state.lines, { ...input, id, quantity: qtyToAdd }],
       };
     }),
   removeItem: (lineId) =>

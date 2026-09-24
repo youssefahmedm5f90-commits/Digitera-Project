@@ -2,7 +2,11 @@
 import Link from "next/link";
 import { productPaths } from "@/features/products/paths";
 
-export function ProductBreadcrumbs() {
+type ProductBreadcrumbsProps = {
+  productName?: string;
+};
+
+export function ProductBreadcrumbs({ productName }: ProductBreadcrumbsProps) {
   return (
     <nav
       aria-label="Breadcrumb"
@@ -10,8 +14,8 @@ export function ProductBreadcrumbs() {
     >
       <span className="flex items-center gap-2">
         <Link
-          href={productPaths.list}
-          className="text-[12px] font-normal whitespace-nowrap text-[#605a54]"
+          href="/"
+          className="text-[12px] font-normal whitespace-nowrap text-[#605a54] transition-colors hover:text-[#1a1a1a]"
         >
           Home
         </Link>
@@ -20,15 +24,33 @@ export function ProductBreadcrumbs() {
       <span className="flex items-center gap-2">
         <Link
           href={productPaths.list}
-          className="text-[12px] font-normal whitespace-nowrap text-[#605a54]"
+          className="text-[12px] font-normal whitespace-nowrap text-[#605a54] transition-colors hover:text-[#1a1a1a]"
         >
           Shop
         </Link>
         <img src="/icons/chevron-right.svg" alt="" width={10} height={10} />
       </span>
-      <span className="text-[12px] font-semibold whitespace-nowrap text-[#1a1a1a]">
-        All Fragrances
-      </span>
+      {productName ? (
+        <>
+          <span className="flex items-center gap-2">
+            <Link
+              href={productPaths.list}
+              className="text-[12px] font-normal whitespace-nowrap text-[#605a54] transition-colors hover:text-[#1a1a1a]"
+            >
+              Fragrances
+            </Link>
+            <img src="/icons/chevron-right.svg" alt="" width={10} height={10} />
+          </span>
+          <span className="text-[12px] font-semibold whitespace-nowrap text-[#1a1a1a]">
+            {productName}
+          </span>
+        </>
+      ) : (
+        <span className="text-[12px] font-semibold whitespace-nowrap text-[#1a1a1a]">
+          All Fragrances
+        </span>
+      )}
     </nav>
   );
 }
+
