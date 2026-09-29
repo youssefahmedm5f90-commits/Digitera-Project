@@ -3,6 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { memo, useEffect, useMemo, useState, type ReactNode } from "react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { ProductCard } from "@/features/products/components/ProductCard";
 import { ProductDetails } from "@/features/products/components/ProductDetails";
 import { ProductImages } from "@/features/products/components/ProductImages";
@@ -35,7 +37,9 @@ type ProductDetailsPageProps = {
 };
 
 function volumeGroups(product: Product): VolumeGroup[] {
-  const configured = product.options.filter((option) => option.values.length > 0);
+  const configured = product.options.filter(
+    (option) => option.values.length > 0,
+  );
 
   if (configured.length > 0) {
     return configured.map((option) => ({
@@ -100,24 +104,25 @@ function GiftWrapSwitch({
   onChange: (enabled: boolean) => void;
 }) {
   return (
-    <button
+    <m.button
       type="button"
       role="switch"
       aria-checked={enabled}
       aria-label="Complimentary signature gift wrapping"
       className={cn(
-        "relative h-6 w-11 shrink-0 rounded-full",
+        "relative h-6 w-11 shrink-0 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880]",
         enabled ? "bg-[#c5a880]" : "bg-[#ebe6de]",
       )}
+      whileTap={{ scale: 0.94 }}
+      transition={{ duration: 0.16, ease: "easeOut" }}
       onClick={() => onChange(!enabled)}
     >
-      <span
-        className={cn(
-          "absolute top-0.5 size-5 rounded-full bg-white",
-          enabled ? "left-[22px]" : "left-0.5",
-        )}
+      <m.span
+        animate={{ x: enabled ? 20 : 0 }}
+        transition={{ type: "spring", stiffness: 460, damping: 32 }}
+        className="absolute top-0.5 left-0.5 size-5 rounded-full bg-white"
       />
-    </button>
+    </m.button>
   );
 }
 
@@ -158,9 +163,9 @@ export function ProductDetailsPage({
   const productQuery = useProduct(productId);
   const relatedQuery = useProducts({ page: 1, pageSize: 50 });
   const product = productQuery.data;
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(
-    {},
-  );
+  const [selectedOptions, setSelectedOptions] = useState<
+    Record<string, string>
+  >({});
   const [quantity, setQuantity] = useState(1);
   const [giftWrap, setGiftWrap] = useState(true);
 
@@ -252,11 +257,21 @@ export function ProductDetailsPage({
   }
 
   return (
-    <article className="bg-[#faf8f5] text-[#1a1a1a]">
+    <m.article
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: "easeOut" }}
+      className="bg-[#faf8f5] text-[#1a1a1a]"
+    >
       <ProductBreadcrumb name={product.name} />
       <div className="flex flex-col items-start gap-10 px-4 pb-16 sm:px-6 md:px-10 lg:flex-row lg:gap-16 lg:px-20 lg:pb-[100px]">
         <ProductImages product={product} />
-        <div className="flex w-full shrink-0 flex-col items-start gap-8 lg:w-[560px]">
+        <m.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.28, delay: 0.06, ease: "easeOut" }}
+          className="flex w-full shrink-0 flex-col items-start gap-8 lg:w-[560px]"
+        >
           <ProductDetails product={product} price={unitPrice} />
           <div className="h-px w-full bg-[#ebe6de]" />
           <ProductOptions
@@ -282,28 +297,41 @@ export function ProductDetailsPage({
           </div>
           <div className="flex w-full items-center gap-4">
             <div className="flex shrink-0 items-center rounded border border-[#ebe6de]">
-              <button
+              <m.button
                 type="button"
                 aria-label="Decrease quantity"
-                className="inline-flex h-12 w-11 items-center justify-center text-[16px] leading-none font-normal text-[#605a54] disabled:opacity-40"
+                className="inline-flex h-12 w-11 items-center justify-center text-[16px] leading-none font-normal text-[#605a54] focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#c5a880] disabled:opacity-40"
                 disabled={quantity <= 1}
+                whileTap={quantity > 1 ? { scale: 0.88 } : undefined}
+                transition={{ duration: 0.12 }}
                 onClick={() =>
                   setQuantity((current) => Math.max(1, current - 1))
                 }
               >
                 -
-              </button>
-              <span className="min-w-4 text-center text-[14px] leading-[normal] font-semibold text-[#1a1a1a]">
-                {quantity}
-              </span>
-              <button
+              </m.button>
+              <AnimatePresence mode="popLayout" initial={false}>
+                <m.span
+                  key={quantity}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  transition={{ duration: 0.14, ease: "easeOut" }}
+                  className="min-w-4 text-center text-[14px] leading-[normal] font-semibold text-[#1a1a1a]"
+                >
+                  {quantity}
+                </m.span>
+              </AnimatePresence>
+              <m.button
                 type="button"
                 aria-label="Increase quantity"
-                className="inline-flex h-12 w-11 items-center justify-center text-[16px] leading-none font-normal text-[#605a54]"
+                className="inline-flex h-12 w-11 items-center justify-center text-[16px] leading-none font-normal text-[#605a54] focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#c5a880]"
+                whileTap={{ scale: 0.88 }}
+                transition={{ duration: 0.12 }}
                 onClick={() => setQuantity((current) => current + 1)}
               >
                 +
-              </button>
+              </m.button>
             </div>
             <div className="min-w-0 flex-1">
               {actions?.({
@@ -335,9 +363,9 @@ export function ProductDetailsPage({
               </div>
             ) : null}
           </div>
-        </div>
+        </m.div>
       </div>
       <RelatedProducts products={related} isLoading={relatedQuery.isLoading} />
-    </article>
+    </m.article>
   );
 }

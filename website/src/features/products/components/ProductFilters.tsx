@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import * as m from "motion/react-m";
 import { useProductFilters } from "@/features/products/hooks/useProductFilters";
 import type { ProductListQuery } from "@/features/products/types/product.types";
 import {
@@ -170,7 +171,6 @@ const PRICE_STEP = 10;
 const rangeInputClassName =
   "pointer-events-none absolute inset-x-0 translate-y-1/2 top-[2px] h-4 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#c5a880] [&::-moz-range-thumb]:bg-white [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#c5a880] [&::-webkit-slider-thumb]:bg-white";
 
-
 function paintPriceRange(
   fill: HTMLDivElement | null,
   minLabel: HTMLParagraphElement | null,
@@ -239,7 +239,13 @@ function PriceRangeFilter({
       maxInputRef.current.value = String(maxPrice);
     }
 
-    paintPriceRange(fillRef.current, minLabelRef.current, maxLabelRef.current, minPrice, maxPrice);
+    paintPriceRange(
+      fillRef.current,
+      minLabelRef.current,
+      maxLabelRef.current,
+      minPrice,
+      maxPrice,
+    );
   }, [maxPrice, minPrice]);
 
   const commit = () => {
@@ -299,7 +305,10 @@ function PriceRangeFilter({
             style={{ transform: "translateY(calc(-50% - 8px))" }}
             onPointerDown={beginDrag}
             onInput={(event) => {
-              const next = Math.min(Number(event.currentTarget.value), maxRef.current - PRICE_STEP);
+              const next = Math.min(
+                Number(event.currentTarget.value),
+                maxRef.current - PRICE_STEP,
+              );
               minRef.current = next;
 
               if (next !== Number(event.currentTarget.value)) {
@@ -328,7 +337,10 @@ function PriceRangeFilter({
             style={{ transform: "translateY(calc(-50% - 8px))" }}
             onPointerDown={beginDrag}
             onInput={(event) => {
-              const next = Math.max(Number(event.currentTarget.value), minRef.current + PRICE_STEP);
+              const next = Math.max(
+                Number(event.currentTarget.value),
+                minRef.current + PRICE_STEP,
+              );
               maxRef.current = next;
 
               if (next !== Number(event.currentTarget.value)) {
@@ -370,7 +382,8 @@ export function ProductFilters({ query }: { query: ProductListQuery }) {
     toggleScentFamily,
     toggleOccasion,
   } = useProductFilters(query);
-  const priceActive = minPrice > PRICE_FILTER_MIN || maxPrice < PRICE_FILTER_MAX;
+  const priceActive =
+    minPrice > PRICE_FILTER_MIN || maxPrice < PRICE_FILTER_MAX;
   const selectedCount =
     categories.length +
     scentFamilies.length +
@@ -380,24 +393,23 @@ export function ProductFilters({ query }: { query: ProductListQuery }) {
 
   return (
     <aside className="w-full shrink-0 lg:w-[260px]">
-      <button
+      <m.button
         type="button"
-        className="flex w-full items-center justify-between rounded border border-solid border-[#ebe6de] bg-white px-4 py-3 text-[12px] font-semibold uppercase text-[#1a1a1a] lg:hidden"
+        className="flex w-full items-center justify-between rounded border border-solid border-[#ebe6de] bg-white px-4 py-3 text-[12px] font-semibold uppercase text-[#1a1a1a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880] lg:hidden"
         aria-expanded={open}
+        whileTap={{ scale: 0.99 }}
         onClick={() => setOpen((current) => !current)}
       >
-        <span>
-          Filters{selectedCount > 0 ? ` (${selectedCount})` : ""}
-        </span>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <span>Filters{selectedCount > 0 ? ` (${selectedCount})` : ""}</span>
+        <m.img
           src="/icons/chevron-down.svg"
           alt=""
           width={14}
           height={14}
-          className={cn("transition-transform", open && "rotate-180")}
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
         />
-      </button>
+      </m.button>
       <div
         className={cn(
           "flex-col items-start gap-8",

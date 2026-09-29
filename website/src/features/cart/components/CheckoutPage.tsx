@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import * as m from "motion/react-m";
 import { cartPaths } from "@/features/cart/paths";
 import { useCart } from "@/features/cart/hooks/useCart";
 import type { CartLine } from "@/features/cart/types/cart.types";
@@ -21,7 +22,7 @@ type PaymentMethod = "card" | "cash";
 const fieldClassName =
   "w-full rounded-[4px] border border-[#ebe6de] bg-white px-4 text-[14px] leading-[normal] text-[#1a1a1a] outline-none focus:border-[#1a1a1a]";
 
-const WHATSAPP_ORDER_URL = "https://wa.me/DIGITERA-WHATSAPP-NUMBER";
+const WHATSAPP_ORDER_URL = "https://wa.me/201111836476";
 
 function buildOrderMessage(input: {
   recipientName: string;
@@ -282,13 +283,16 @@ export function CheckoutPage() {
               <p className="text-[13px]">Total</p>
               <p className="text-[20px]">{formatCartAmount(orderTotal)}</p>
             </div>
-            <button
+            <m.button
               type="submit"
               disabled={!canPlaceOrder || placed}
-              className="w-full rounded bg-[#1a1a1a] py-4 text-[13px] leading-[normal] font-bold text-white uppercase disabled:cursor-not-allowed disabled:opacity-40"
+              className="w-full rounded bg-[#1a1a1a] py-4 text-[13px] leading-[normal] font-bold text-white uppercase focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880] disabled:cursor-not-allowed disabled:opacity-40"
+              whileHover={canPlaceOrder && !placed ? { y: -1 } : undefined}
+              whileTap={canPlaceOrder && !placed ? { scale: 0.99 } : undefined}
+              transition={{ duration: 0.16, ease: "easeOut" }}
             >
               {placed ? "Order placed" : "Place order"}
-            </button>
+            </m.button>
             <p className="text-center text-[10px] leading-[normal] font-normal text-[#605a54] uppercase">
               Secure checkout · Visa · Mastercard · Amex
             </p>
@@ -314,13 +318,13 @@ function PaymentOption({
   onSelect: () => void;
 }) {
   return (
-    <label
+    <m.label
       className={cn(
-        "flex items-center gap-3 rounded-[4px] bg-white p-4",
-        selected
-          ? "border-2 border-[#1a1a1a]"
-          : "border border-[#ebe6de]",
+        "flex items-center gap-3 rounded-[4px] bg-white p-4 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#c5a880]",
+        selected ? "border-2 border-[#1a1a1a]" : "border border-[#ebe6de]",
       )}
+      whileTap={{ scale: 0.99 }}
+      transition={{ duration: 0.14, ease: "easeOut" }}
     >
       <input
         type="radio"
@@ -331,9 +335,7 @@ function PaymentOption({
       />
       <img
         src={
-          selected
-            ? "/icons/radio-selected.svg"
-            : "/icons/radio-unselected.svg"
+          selected ? "/icons/radio-selected.svg" : "/icons/radio-unselected.svg"
         }
         alt=""
         width={18}
@@ -347,7 +349,7 @@ function PaymentOption({
       >
         {name}
       </span>
-    </label>
+    </m.label>
   );
 }
 

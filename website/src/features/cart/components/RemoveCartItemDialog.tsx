@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import * as m from "motion/react-m";
 import type { CartLine } from "@/features/cart/types/cart.types";
 
 type RemoveCartItemDialogProps = {
@@ -61,20 +62,24 @@ export function RemoveCartItemDialog({
           </p>
         </div>
         <div className="flex gap-3">
-          <button
+          <m.button
             type="button"
-            className="flex-1 cursor-pointer rounded border border-[#ebe6de] bg-white py-3 text-[12px] leading-[normal] font-semibold tracking-wide text-[#1a1a1a] uppercase"
+            className="flex-1 cursor-pointer rounded border border-[#ebe6de] bg-white py-3 text-[12px] leading-[normal] font-semibold tracking-wide text-[#1a1a1a] uppercase focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880]"
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.985 }}
             onClick={() => closeThen(onCancel)}
           >
             Keep
-          </button>
-          <button
+          </m.button>
+          <m.button
             type="button"
-            className="flex-1 cursor-pointer rounded bg-[#1a1a1a] py-3 text-[12px] leading-[normal] font-semibold tracking-wide text-white uppercase"
+            className="flex-1 cursor-pointer rounded bg-[#1a1a1a] py-3 text-[12px] leading-[normal] font-semibold tracking-wide text-white uppercase focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880]"
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.985 }}
             onClick={() => closeThen(onConfirm)}
           >
             Remove
-          </button>
+          </m.button>
         </div>
       </div>
     </dialog>

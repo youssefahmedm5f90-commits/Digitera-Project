@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import * as m from "motion/react-m";
 import { useCart } from "@/features/cart";
 import { productPaths } from "@/features/products/paths";
 import type { Product } from "@/features/products/types/product.types";
@@ -19,17 +20,21 @@ export function ProductCard({ product }: ProductCardProps) {
   const image = resolveProductImages(product)[0];
 
   return (
-    <article className="flex min-w-0 flex-1 flex-col items-start gap-4 self-stretch rounded-lg bg-white p-4">
+    <m.article
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="flex min-w-0 flex-1 flex-col items-start gap-4 self-stretch rounded-lg bg-white p-4"
+    >
       <Link
         href={productPaths.detail(product.id)}
-        className="relative h-[240px] w-full shrink-0 overflow-hidden rounded sm:h-[280px] lg:h-[320px]"
+        className="group relative h-[240px] w-full shrink-0 overflow-hidden rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880] sm:h-[280px] lg:h-[320px]"
       >
         {image ? (
           <Image
             src={image}
             alt={product.name}
             fill
-            className="rounded object-cover"
+            className="rounded object-cover transition-transform duration-500 group-hover:scale-[1.035]"
             sizes="(min-width: 1280px) 28vw, (min-width: 640px) 45vw, 100vw"
           />
         ) : (
@@ -42,7 +47,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="flex w-full items-start justify-between">
           <Link
             href={productPaths.detail(product.id)}
-            className="flex min-w-0 flex-col items-start gap-1"
+            className="flex min-w-0 flex-col items-start gap-1 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880]"
           >
             <h2 className="w-full font-[family-name:var(--font-instrument-serif)] text-[20px] text-[#1a1a1a] sm:truncate sm:text-[22px]">
               {product.name}
@@ -55,9 +60,12 @@ export function ProductCard({ product }: ProductCardProps) {
             {formatWholePrice(product.price)}
           </p>
         </div>
-        <button
+        <m.button
           type="button"
-          className="flex w-full cursor-pointer items-center justify-center rounded border border-solid border-[#ebe6de] py-3 text-[11px] font-semibold uppercase whitespace-nowrap text-[#1a1a1a]"
+          className="flex w-full cursor-pointer items-center justify-center rounded border border-solid border-[#ebe6de] py-3 text-[11px] font-semibold uppercase whitespace-nowrap text-[#1a1a1a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880]"
+          whileHover={{ y: -1, borderColor: "#c5a880" }}
+          whileTap={{ scale: 0.985 }}
+          transition={{ duration: 0.16, ease: "easeOut" }}
           onClick={() =>
             addItem({
               productId: product.id,
@@ -69,8 +77,8 @@ export function ProductCard({ product }: ProductCardProps) {
           }
         >
           Add to Cart +
-        </button>
+        </m.button>
       </div>
-    </article>
+    </m.article>
   );
 }

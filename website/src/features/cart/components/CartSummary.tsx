@@ -1,4 +1,5 @@
 import Link from "next/link";
+import * as m from "motion/react-m";
 import { cartPaths } from "@/features/cart/paths";
 import { productPaths } from "@/features/products/paths";
 import { formatCartAmount } from "@/features/cart/utils/cart.utils";
@@ -36,32 +37,37 @@ export function CartSummary({ subtotal, delivery }: CartSummaryProps) {
             <p className="text-[20px]">{formatCartAmount(total)}</p>
           </div>
           {subtotal === 0 ? (
-            <button
+            <m.button
               type="button"
-              className="w-full rounded bg-[#1a1a1a] py-4 text-[12px] leading-[normal] font-bold text-white uppercase disabled:cursor-not-allowed disabled:opacity-40"
+              className="w-full rounded bg-[#1a1a1a] py-4 text-[12px] leading-[normal] font-bold text-white uppercase focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880] disabled:cursor-not-allowed disabled:opacity-40"
               disabled
+              aria-disabled="true"
             >
               Proceed to checkout
-            </button>
+            </m.button>
           ) : (
-            <Link
-              href={cartPaths.checkout}
-              className="flex w-full items-center justify-center rounded bg-[#1a1a1a] py-4 text-[12px] leading-[normal] font-bold text-white uppercase"
-            >
-              Proceed to checkout
-            </Link>
+            <m.div whileHover={{ y: -1 }} whileTap={{ scale: 0.99 }}>
+              <Link
+                href={cartPaths.checkout}
+                className="flex w-full items-center justify-center rounded bg-[#1a1a1a] py-4 text-[12px] leading-[normal] font-bold text-white uppercase focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880]"
+              >
+                Proceed to checkout
+              </Link>
+            </m.div>
           )}
           <p className="text-center text-[10px] leading-[normal] font-normal text-[#605a54] uppercase">
             Secure checkout · Visa · Mastercard · Amex
           </p>
         </div>
       </div>
-      <Link
-        href={productPaths.list}
-        className="text-center text-[12px] leading-[normal] font-normal text-[#605a54] uppercase underline"
-      >
-        Continue shopping
-      </Link>
+      <m.div whileHover={{ y: -1 }} whileTap={{ scale: 0.99 }}>
+        <Link
+          href={productPaths.list}
+          className="text-center text-[12px] leading-[normal] font-normal text-[#605a54] uppercase underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880]"
+        >
+          Continue shopping
+        </Link>
+      </m.div>
     </aside>
   );
 }

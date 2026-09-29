@@ -4,6 +4,8 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, type FormEvent } from "react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { CartNavLink } from "@/features/cart";
 import { productPaths } from "@/features/products";
 
@@ -26,11 +28,14 @@ function SearchForm({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const search = pathname === productPaths.list ? (searchParams.get("search") ?? "") : "";
+  const search =
+    pathname === productPaths.list ? (searchParams.get("search") ?? "") : "";
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const value = String(new FormData(event.currentTarget).get("search") ?? "").trim();
+    const value = String(
+      new FormData(event.currentTarget).get("search") ?? "",
+    ).trim();
     const params = new URLSearchParams(
       pathname === productPaths.list ? searchParams.toString() : "",
     );
@@ -48,7 +53,12 @@ function SearchForm({
   }
 
   return (
-    <form action={productPaths.list} method="get" className={className} onSubmit={onSubmit}>
+    <form
+      action={productPaths.list}
+      method="get"
+      className={className}
+      onSubmit={onSubmit}
+    >
       <img src="/icons/search.svg" alt="" width={14} height={14} />
       <input
         key={search}
@@ -66,7 +76,12 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-[#faf8f5]">
+    <m.header
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className="sticky top-0 z-40 bg-[#faf8f5]"
+    >
       <div className="bg-[#1a1a1a] px-4 py-2.5 text-center lg:py-3">
         <p className="text-[9px] leading-[normal] font-normal text-white uppercase lg:text-[11px] lg:font-semibold">
           <span className="lg:hidden">
@@ -81,30 +96,40 @@ export function Header() {
         <div className="grid h-[68px] grid-cols-[1fr_auto_1fr] items-center px-5 lg:h-[90px] lg:px-20">
           <nav className="hidden items-center gap-10 justify-self-start lg:flex">
             {NAV_LINKS.map((link) => (
-              <Link
+              <m.div
                 key={link.label}
-                href={link.href}
-                className="text-[13px] leading-[normal] font-medium text-[#605a54] uppercase"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
-                {link.label}
-              </Link>
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-[13px] leading-[normal] font-medium text-[#605a54] uppercase focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c5a880]"
+                >
+                  {link.label}
+                </Link>
+              </m.div>
             ))}
           </nav>
-          <button
+          <m.button
             type="button"
-            className="justify-self-start lg:hidden"
+            className="justify-self-start rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c5a880] lg:hidden"
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.92 }}
             onClick={() => setMenuOpen((open) => !open)}
           >
             <img src="/icons/menu.svg" alt="" width={22} height={22} />
-          </button>
-          <Link
-            href="/"
-            className="font-[family-name:var(--font-instrument-serif)] text-[25px] leading-[normal] text-[#1a1a1a] lg:text-[38px] lg:tracking-[0.18em] lg:-mr-[0.18em]"
-          >
-            ODORATUS
-          </Link>
+          </m.button>
+          <m.div whileTap={{ scale: 0.98 }}>
+            <Link
+              href="/"
+              className="font-[family-name:var(--font-instrument-serif)] text-[25px] leading-[normal] text-[#1a1a1a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c5a880] lg:text-[38px] lg:tracking-[0.18em] lg:-mr-[0.18em]"
+            >
+              ODORATUS
+            </Link>
+          </m.div>
           <div className="flex items-center justify-self-end gap-7">
             <Suspense
               fallback={
@@ -124,27 +149,41 @@ export function Header() {
             <CartNavLink />
           </div>
         </div>
-        {menuOpen ? (
-          <nav className="absolute inset-x-0 top-full z-20 flex flex-col gap-4 border-b border-[#ebe6de] bg-[#faf8f5] px-5 py-5 lg:hidden">
-            <Suspense>
-              <SearchForm
-                className="flex w-full items-center gap-2 rounded-full border border-[#ebe6de] bg-white px-3 py-2"
-                onSearched={() => setMenuOpen(false)}
-              />
-            </Suspense>
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-[13px] leading-[normal] font-medium text-[#605a54] uppercase"
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        ) : null}
+        <AnimatePresence initial={false}>
+          {menuOpen ? (
+            <m.nav
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="absolute inset-x-0 top-full z-20 flex flex-col gap-4 border-b border-[#ebe6de] bg-[#faf8f5] px-5 py-5 lg:hidden"
+            >
+              <Suspense>
+                <SearchForm
+                  className="flex w-full items-center gap-2 rounded-full border border-[#ebe6de] bg-white px-3 py-2"
+                  onSearched={() => setMenuOpen(false)}
+                />
+              </Suspense>
+              {NAV_LINKS.map((link) => (
+                <m.div
+                  key={link.label}
+                  whileHover={{ x: 3 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className="text-[13px] leading-[normal] font-medium text-[#605a54] uppercase focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c5a880]"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </m.div>
+              ))}
+            </m.nav>
+          ) : null}
+        </AnimatePresence>
       </div>
-    </header>
+    </m.header>
   );
 }

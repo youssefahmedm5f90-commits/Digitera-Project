@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { CartItem } from "@/features/cart/components/CartItem";
 import { CartSummary } from "@/features/cart/components/CartSummary";
 import { RemoveCartItemDialog } from "@/features/cart/components/RemoveCartItemDialog";
@@ -17,10 +19,7 @@ export function CartPage() {
 
   return (
     <section className="bg-[#faf8f5] text-[#1a1a1a]">
-      <nav
-        aria-label="Breadcrumb"
-        className="hidden px-20 py-6 lg:block"
-      >
+      <nav aria-label="Breadcrumb" className="hidden px-20 py-6 lg:block">
         <p className="text-[12px] leading-[normal] font-normal text-[#605a54]">
           <Link href="/">Home</Link>
           <span>{"  /  "}</span>
@@ -44,23 +43,37 @@ export function CartPage() {
           </div>
           <div className="flex flex-col gap-3.5 lg:gap-5">
             {lines.length === 0 ? (
-              <p className="text-[14px] leading-[normal] text-[#605a54]">
+              <m.p
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-[14px] leading-[normal] text-[#605a54]"
+              >
                 Your cart is empty.
-              </p>
+              </m.p>
             ) : (
-              lines.map((line) => (
-                <CartItem
-                  key={line.id}
-                  line={line}
-                  onIncrement={increment}
-                  onDecrement={decrement}
-                  onRemove={(lineId) =>
-                    setPendingRemoval(
-                      lines.find((line) => line.id === lineId) ?? null,
-                    )
-                  }
-                />
-              ))
+              <AnimatePresence initial={false} mode="popLayout">
+                {lines.map((line) => (
+                  <m.div
+                    key={line.id}
+                    layout
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: 12 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    <CartItem
+                      line={line}
+                      onIncrement={increment}
+                      onDecrement={decrement}
+                      onRemove={(lineId) =>
+                        setPendingRemoval(
+                          lines.find((line) => line.id === lineId) ?? null,
+                        )
+                      }
+                    />
+                  </m.div>
+                ))}
+              </AnimatePresence>
             )}
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils/cn";
 import { formatWholePrice } from "@/features/products/utils/product.utils";
+import * as m from "motion/react-m";
 
 export type VolumeChoice = {
   id: string;
@@ -43,7 +44,7 @@ export function ProductOptions({
               const isSelected = selected[group.id] === choice.id;
 
               return (
-                <button
+                <m.button
                   key={choice.id}
                   type="button"
                   aria-pressed={isSelected}
@@ -52,7 +53,11 @@ export function ProductOptions({
                     isSelected
                       ? "border-2 border-[#1a1a1a] bg-white"
                       : "border border-[#ebe6de]",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880]",
                   )}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.985 }}
+                  transition={{ duration: 0.16, ease: "easeOut" }}
                   onClick={() => onChange(group.id, choice.id)}
                 >
                   <span
@@ -66,7 +71,7 @@ export function ProductOptions({
                   <span className="text-[11px] leading-[normal] font-normal text-[#605a54]">
                     {formatWholePrice(choice.price)}
                   </span>
-                </button>
+                </m.button>
               );
             })}
           </div>

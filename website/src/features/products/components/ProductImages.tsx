@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { memo, useEffect, useState } from "react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import type { Product } from "@/features/products/types/product.types";
 import { resolveProductImages } from "@/features/products/utils/product.utils";
 import { cn } from "@/lib/utils/cn";
@@ -31,21 +33,26 @@ function ProductImagesComponent({ product }: ProductImagesProps) {
   return (
     <div className="flex w-full min-w-0 flex-1 flex-col items-start gap-4">
       <div className="relative h-[360px] w-full overflow-hidden rounded-lg sm:h-[480px] lg:h-[600px]">
-        {images.map((src, index) => (
-          <Image
-            key={`${src}-${index}`}
-            src={src}
-            alt={index === selected ? product.name : ""}
-            fill
-            priority
-            unoptimized={src.startsWith("/")}
-            className={cn(
-              "object-cover",
-              index === selected ? "z-10 opacity-100" : "z-0 opacity-0",
-            )}
-            sizes="(min-width: 1024px) 50vw, 100vw"
-          />
-        ))}
+        <AnimatePresence mode="wait" initial={false}>
+          <m.div
+            key={image}
+            initial={{ opacity: 0, scale: 1.015 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.24, ease: "easeOut" }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={image}
+              alt={product.name}
+              fill
+              priority
+              unoptimized={image.startsWith("/")}
+              className="object-cover"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
+          </m.div>
+        </AnimatePresence>
       </div>
       {images.length > 1 ? (
         <div className="flex w-full items-start gap-4">
@@ -53,7 +60,7 @@ function ProductImagesComponent({ product }: ProductImagesProps) {
             const isSelected = index === selected;
 
             return (
-              <button
+              <m.button
                 key={`${src}-${index}`}
                 type="button"
                 aria-label={`Show ${product.name} image ${index + 1}`}
@@ -61,7 +68,11 @@ function ProductImagesComponent({ product }: ProductImagesProps) {
                 className={cn(
                   "relative h-[88px] min-w-0 flex-1 overflow-hidden rounded sm:h-[120px]",
                   isSelected && "border-2 border-[#c5a880]",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a880]",
                 )}
+                whileHover={{ scale: 1.015 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.16, ease: "easeOut" }}
                 onClick={() => setSelected(index)}
               >
                 <Image
@@ -72,7 +83,7 @@ function ProductImagesComponent({ product }: ProductImagesProps) {
                   className="object-cover"
                   sizes="160px"
                 />
-              </button>
+              </m.button>
             );
           })}
         </div>
