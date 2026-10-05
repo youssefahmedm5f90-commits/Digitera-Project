@@ -1,6 +1,7 @@
 "use client";
 
 import { ProductCard, useProduct } from "@/features/products";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 const FEATURED_PRODUCTS = [
   { id: "fleur-de-lune", image: "/images/home/product-fleur-de-lune.png" },
@@ -40,8 +41,10 @@ function FeaturedProduct({
 export function FeaturedProducts() {
   return (
     <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4">
-      {FEATURED_PRODUCTS.map(({ id, image }) => (
-        <FeaturedProduct key={id} productId={id} image={image} />
+      {FEATURED_PRODUCTS.map(({ id, image }, index) => (
+        <ScrollReveal key={id} delay={index * 0.1} className="h-full">
+          <FeaturedProduct productId={id} image={image} />
+        </ScrollReveal>
       ))}
     </div>
   );

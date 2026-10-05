@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { useQuery } from "@tanstack/react-query";
 import { env } from "@/config/env";
 import { productPaths } from "@/features/products";
@@ -198,26 +199,27 @@ export function DiscoverySections() {
         aria-labelledby="scent-archetypes-title"
         className="flex w-full flex-col items-start gap-12 bg-[#f4f0eb] px-5 py-16 sm:px-6 lg:px-20 lg:py-20"
       >
-        <div className="w-full">
+        <ScrollReveal className="w-full">
           <SectionHeading
             id="scent-archetypes-title"
             title="Scent Archetypes"
             subtitle="Curate your presence by scent profile"
           />
-        </div>
+        </ScrollReveal>
         <div className="grid w-full grid-cols-2 gap-4 sm:gap-5 xl:grid-cols-4">
-          {SCENT_FAMILIES.map((tile) => {
+          {SCENT_FAMILIES.map((tile, index) => {
             const taxonomy = taxonomies.find(
               (item) => item._type === "scentFamily" && item.slug === tile.slug,
             );
 
             return (
-              <DiscoveryTileLink
-                key={tile.slug}
-                tile={{ ...tile, title: taxonomy?.title || tile.title }}
-                href={taxonomyHref("scentFamily", tile.slug, taxonomies)}
-                overlay
-              />
+              <ScrollReveal key={tile.slug} delay={index * 0.1} className="h-full">
+                <DiscoveryTileLink
+                  tile={{ ...tile, title: taxonomy?.title || tile.title }}
+                  href={taxonomyHref("scentFamily", tile.slug, taxonomies)}
+                  overlay
+                />
+              </ScrollReveal>
             );
           })}
         </div>
@@ -226,25 +228,26 @@ export function DiscoverySections() {
         aria-labelledby="occasions-title"
         className="flex w-full flex-col items-start gap-12 px-5 py-16 sm:px-6 lg:px-20 lg:py-[100px]"
       >
-        <div className="w-full">
+        <ScrollReveal className="w-full">
           <SectionHeading
             id="occasions-title"
             title="Occasional Scent Curation"
             subtitle="Intentionally formulated for significant moments"
           />
-        </div>
+        </ScrollReveal>
         <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:grid-cols-4">
-          {OCCASIONS.map((tile) => {
+          {OCCASIONS.map((tile, index) => {
             const taxonomy = taxonomies.find(
               (item) => item._type === "occasion" && item.slug === tile.slug,
             );
 
             return (
-              <DiscoveryTileLink
-                key={tile.slug}
-                tile={{ ...tile, title: taxonomy?.title || tile.title }}
-                href={taxonomyHref("occasion", tile.slug, taxonomies)}
-              />
+              <ScrollReveal key={tile.slug} delay={index * 0.1} className="h-full">
+                <DiscoveryTileLink
+                  tile={{ ...tile, title: taxonomy?.title || tile.title }}
+                  href={taxonomyHref("occasion", tile.slug, taxonomies)}
+                />
+              </ScrollReveal>
             );
           })}
         </div>

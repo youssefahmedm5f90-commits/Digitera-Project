@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { productPaths } from "@/features/products";
 import { DiscoverySections } from "@/features/homepage/components/DiscoverySections";
 import { FeaturedProducts } from "@/features/homepage/components/FeaturedProducts";
@@ -22,7 +23,7 @@ export function HomePage() {
           />
           <span className="absolute inset-0 bg-[rgba(26,26,26,0.3)]" />
         </div>
-        <div className="relative flex w-full max-w-[580px] flex-col items-start gap-6">
+        <ScrollReveal className="relative flex w-full max-w-[580px] flex-col items-start gap-6">
           <h1
             id="home-hero-title"
             className="font-[family-name:var(--font-instrument-serif)] text-[54px] leading-[0.98] text-white sm:text-[68px] lg:text-[80px]"
@@ -40,14 +41,14 @@ export function HomePage() {
           >
             Explore The Collections
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
 
       <section
         aria-labelledby="signatures-title"
         className="flex w-full flex-col items-start gap-12 px-5 py-16 sm:px-6 lg:gap-12 lg:px-20 lg:py-[100px]"
       >
-        <div className="flex w-full flex-col items-center gap-3 text-center">
+        <ScrollReveal className="flex w-full flex-col items-center gap-3 text-center">
           <h2
             id="signatures-title"
             className="w-full font-[family-name:var(--font-instrument-serif)] text-[38px] leading-[1.1] sm:text-[48px]"
@@ -57,14 +58,17 @@ export function HomePage() {
           <p className="w-full text-[12px] font-normal uppercase text-[#605a54] sm:text-[14px]">
             The currently highly coveted extractions
           </p>
-        </div>
+        </ScrollReveal>
         <FeaturedProducts />
       </section>
 
       <DiscoverySections />
 
       <section className="flex w-full flex-col bg-[#f4f0eb] lg:h-[450px] lg:flex-row">
-        <div className="relative h-[300px] w-full shrink-0 sm:h-[360px] lg:h-full lg:w-1/2">
+        <ScrollReveal
+          variant="slide-left"
+          className="relative h-[300px] w-full shrink-0 sm:h-[360px] lg:h-full lg:w-1/2"
+        >
           <Image
             src="/images/home/solstice-promo.png"
             alt="Perfume bottles and botanicals for the Solstice collection"
@@ -72,8 +76,11 @@ export function HomePage() {
             sizes="(min-width: 1024px) 50vw, 100vw"
             className="object-cover"
           />
-        </div>
-        <div className="flex w-full flex-col items-start justify-center gap-6 px-5 py-12 sm:px-8 lg:h-full lg:w-1/2 lg:p-16">
+        </ScrollReveal>
+        <ScrollReveal
+          variant="slide-right"
+          className="flex w-full flex-col items-start justify-center gap-6 px-5 py-12 sm:px-8 lg:h-full lg:w-1/2 lg:p-16"
+        >
           <p className="text-[11px] font-bold text-[#c5a880] uppercase">
             The Summer Solstice
           </p>
@@ -91,7 +98,7 @@ export function HomePage() {
           >
             Secure the Bottle
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
 
       <section
@@ -99,7 +106,7 @@ export function HomePage() {
         aria-labelledby="atelier-chronicles-title"
         className="flex w-full flex-col items-center gap-8 px-5 py-16 text-center sm:px-6 lg:px-20 lg:py-[100px]"
       >
-        <div className="flex w-full max-w-[600px] flex-col items-center gap-3">
+        <ScrollReveal className="flex w-full max-w-[600px] flex-col items-center gap-3">
           <h2
             id="atelier-chronicles-title"
             className="w-full font-[family-name:var(--font-instrument-serif)] text-[36px] leading-[1.1] sm:text-[40px]"
@@ -110,8 +117,11 @@ export function HomePage() {
             Subscribe to receive exclusive access to Private Reserves, launch
             invitations, and seasonal olfactory compositions.
           </p>
-        </div>
-        <div className="flex w-full max-w-[500px] flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+        </ScrollReveal>
+        <ScrollReveal
+          delay={0.1}
+          className="flex w-full max-w-[500px] flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
+        >
           <label className="sr-only" htmlFor="newsletter-email">
             Email address
           </label>
@@ -127,7 +137,7 @@ export function HomePage() {
           >
             Join
           </button>
-        </div>
+        </ScrollReveal>
       </section>
     </div>
   );
