@@ -14,6 +14,7 @@ export function useProductSearch(search = "") {
         next
           ? `${productPaths.list}?search=${encodeURIComponent(next)}`
           : productPaths.list,
+        { scroll: false },
       );
     },
   };

@@ -7,6 +7,7 @@ export type ProductOption = {
 };
 
 export type Product = {
+  _id?: string;
   id: ProductId;
   name: string;
   description: string;

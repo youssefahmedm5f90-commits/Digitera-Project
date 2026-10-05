@@ -79,4 +79,22 @@ describe("selectProducts", () => {
       "Fleur de Lune",
     ]);
   });
+
+  it("keeps sorting stable without mutating the input array", () => {
+    const products = [
+      { ...mockProducts[0], id: "product-b", name: "Same name", price: 100 },
+      { ...mockProducts[0], id: "product-a", name: "Same name", price: 100 },
+    ];
+
+    const sorted = selectProducts(products, { sort: "name-asc" });
+
+    expect(sorted.items.map((product) => product.id)).toEqual([
+      "product-a",
+      "product-b",
+    ]);
+    expect(products.map((product) => product.id)).toEqual([
+      "product-b",
+      "product-a",
+    ]);
+  });
 });

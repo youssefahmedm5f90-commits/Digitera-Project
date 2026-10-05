@@ -164,7 +164,7 @@ export function selectProducts(
   query: ProductListQuery,
 ): ProductListResult {
   const terms = query.search?.trim().toLowerCase().split(/\s+/).filter(Boolean) ?? [];
-  const filtered = products.filter((product) => {
+  const filtered = [...products].filter((product) => {
     const haystack = `${product.name} ${product.notes} ${product.description}`.toLowerCase();
 
     const minPrice = query.minPrice ?? PRICE_FILTER_MIN;
@@ -181,12 +181,24 @@ export function selectProducts(
   });
   const sort = query.sort ?? DEFAULT_PRODUCT_SORT;
   const sorted = [...filtered].sort((left, right) => {
-    if (sort === "name-asc") return left.name.localeCompare(right.name);
-    if (sort === "name-desc") return right.name.localeCompare(left.name);
-    if (sort === "price-asc") {
-      return left.price - right.price || left.name.localeCompare(right.name);
+    if (sort === "name-asc") {
+      return left.name.localeCompare(right.name) || left.id.localeCompare(right.id);
     }
-    return right.price - left.price || left.name.localeCompare(right.name);
+    if (sort === "name-desc") {
+      return right.name.localeCompare(left.name) || left.id.localeCompare(right.id);
+    }
+    if (sort === "price-asc") {
+      return (
+        left.price - right.price ||
+        left.name.localeCompare(right.name) ||
+        left.id.localeCompare(right.id)
+      );
+    }
+    return (
+      right.price - left.price ||
+      left.name.localeCompare(right.name) ||
+      left.id.localeCompare(right.id)
+    );
   });
   const pageSize =
     query.pageSize && query.pageSize > 0 ? Math.floor(query.pageSize) : PRODUCT_PAGE_SIZE;

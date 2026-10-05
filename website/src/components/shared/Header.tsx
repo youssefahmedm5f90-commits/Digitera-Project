@@ -12,7 +12,8 @@ import { productPaths } from "@/features/products";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: productPaths.list, label: "Shop" },
-  { href: productPaths.list, label: "Categories" },
+  { href: "/#scent-archetypes", label: "Categories" },
+  { href: "/#atelier-chronicles", label: "The Atelier" },
 ] as const;
 
 const searchFieldClassName =
@@ -48,7 +49,10 @@ function SearchForm({
 
     params.delete("page");
     const query = params.toString();
-    router.push(query ? `${productPaths.list}?${query}` : productPaths.list);
+    router.push(
+      query ? `${productPaths.list}?${query}` : productPaths.list,
+      { scroll: false },
+    );
     onSearched?.();
   }
 
@@ -146,6 +150,14 @@ export function Header() {
             >
               <SearchForm className="hidden w-[200px] items-center gap-2 rounded-full border border-[#ebe6de] px-3 py-2 lg:flex" />
             </Suspense>
+            <button
+              type="button"
+              disabled
+              aria-label="Account"
+              className="hidden size-5 shrink-0 cursor-not-allowed items-center justify-center rounded-sm lg:flex"
+            >
+              <img src="/images/home/user.svg" alt="" width={20} height={20} />
+            </button>
             <CartNavLink />
           </div>
         </div>

@@ -48,7 +48,11 @@ const PRODUCT_SORT_CLAUSE: Record<ProductListSort, string> = {
   "price-desc": "price desc",
 };
 
-export function productsListQuery(sort: ProductListSort, start: number, end: number) {
+export function productsListQuery(
+  sort: ProductListSort,
+  start: number,
+  end: number,
+) {
   if (
     !Number.isInteger(start) ||
     !Number.isInteger(end) ||
@@ -66,4 +70,12 @@ export function productsListQuery(sort: ProductListSort, start: number, end: num
 
 export const PRODUCT_QUERY = defineQuery(`
   *[_type == "product" && slug.current == $slug][0] ${productFields}
+`);
+
+export const HOME_TAXONOMIES_QUERY = defineQuery(`
+  *[_type in ["scentFamily", "occasion"] && defined(slug.current)]{
+    _type,
+    "slug": slug.current,
+    title
+  }
 `);

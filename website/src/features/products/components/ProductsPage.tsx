@@ -23,8 +23,11 @@ export function ProductsPage({ searchParams }: ProductsPageProps) {
     pageSize: PRODUCT_PAGE_SIZE,
   };
   const productsQuery = useProducts(query);
+  const products = productsQuery.data?.items ?? [];
   const page = query.page ?? 1;
-  const total = productsQuery.data?.total ?? 0;
+  const total = productsQuery.isPlaceholderData
+    ? 0
+    : (productsQuery.data?.total ?? 0);
 
   return (
     <section className="overflow-x-hidden bg-[#faf8f5] text-[#1a1a1a]">
@@ -42,17 +45,23 @@ export function ProductsPage({ searchParams }: ProductsPageProps) {
         <div className="flex min-w-0 flex-1 flex-col items-start gap-6">
           <ProductSortControl query={query} availableCount={total} />
           <ProductGrid
-            products={productsQuery.data?.items ?? []}
-            isLoading={productsQuery.isLoading && !productsQuery.data}
+            products={products}
+            isLoading={
+              productsQuery.isPlaceholderData ||
+              (productsQuery.isLoading && !productsQuery.data)
+            }
           />
           <ProductPagination
             page={page}
             pageSize={PRODUCT_PAGE_SIZE}
             total={total}
             previousHref={
-              page > 1 ? toProductListHref({ ...query, page: page - 1 }) : undefined
+              !productsQuery.isPlaceholderData && page > 1
+                ? toProductListHref({ ...query, page: page - 1 })
+                : undefined
             }
             nextHref={
+              !productsQuery.isPlaceholderData &&
               page * PRODUCT_PAGE_SIZE < total
                 ? toProductListHref({ ...query, page: page + 1 })
                 : undefined

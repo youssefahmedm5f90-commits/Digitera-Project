@@ -9,7 +9,7 @@ type ProductGridProps = {
 };
 
 export function ProductGrid({ products, isLoading = false }: ProductGridProps) {
-  if (isLoading) {
+  if (isLoading && products.length === 0) {
     return <p className="text-sm text-[#605a54]">Loading products...</p>;
   }
 
@@ -26,14 +26,13 @@ export function ProductGrid({ products, isLoading = false }: ProductGridProps) {
         },
       }}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.08 }}
+      animate="visible"
       className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-8 xl:grid-cols-3"
     >
       <AnimatePresence mode="popLayout">
         {products.map((product) => (
           <m.div
-            key={product.id}
+            key={product._id || product.id}
             layout
             variants={{
               hidden: { opacity: 0, y: 14 },
